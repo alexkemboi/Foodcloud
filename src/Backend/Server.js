@@ -104,7 +104,7 @@ app.post('/ussd', (req, res) => {
   } else if (text === '1*1') {
     // User selected "Order Fruits." Ask for quantity.
     response = `CON Enter the quantity of fruits you'd like to order (e.g., 5):`;
-  } else if (text==='1*1*') {
+  } else if (text.startsWith('1*1*')) {
     // User entered the quantity for fruits. Implement order logic here.
     const quantity = text.split('*').pop(); // Extract the quantity entered by the user.
     // You can now process the order with the selected quantity.
@@ -118,7 +118,7 @@ app.post('/ussd', (req, res) => {
     response = `CON Enter the quantity of vegetables you'd like to order (e.g., 10):`;
     
     
-  } else if (text==='1*2*') {
+  } else if (text.startsWith('1*2*')) {
     // User entered the quantity for vegetables. Implement order logic here.
     const quantity = text.split('*').pop(); // Extract the quantity entered by the user.
     // You can now process the order with the selected quantity.
@@ -128,7 +128,7 @@ app.post('/ussd', (req, res) => {
   } else if (text === '1*3') {
     // User selected "Order Grains." Ask for quantity.
     response = `CON Enter the quantity of grains you'd like to order (e.g., 20 kg):`;
-  } else if (text==='1*3*') {
+  } else if (text.startsWith('1*3*')) {
     // User entered the quantity for grains. Implement order logic here.
     const quantity = text.split('*').pop(); // Extract the quantity entered by the user.
     // You can now process the order with the selected quantity.
@@ -150,7 +150,7 @@ app.post('/ussd', (req, res) => {
   } else if (text === '2*1') {
     // User selected "Sell Fruits." Ask for product details.
     response = `CON Enter the details of the fruits you want to sell (e.g., type, quantity, price):`;
-  } else if (text==='2*1*') {
+  } else if (text.startsWith('2*1*')) {
     // User entered the details for selling fruits. Implement product listing logic here.
     const productDetails = text.split('*').pop(); // Extract the product details entered by the user.
     // You can now process the product listing with the entered details.
@@ -160,7 +160,7 @@ app.post('/ussd', (req, res) => {
   } else if (text === '2*2') {
     // User selected "Sell Vegetables." Ask for product details.
     response = `CON Enter the details of the vegetables you want to sell (e.g., type, quantity, price):`;
-  } else if (text==='2*2*') {
+  } else if (text.startsWith('2*2*')) {
     // User entered the details for selling vegetables. Implement product listing logic here.
     const productDetails = text.split('*').pop(); // Extract the product details entered by the user.
     // You can now process the product listing with the entered details.
@@ -200,20 +200,76 @@ else if (text === '3*1') {
   res.send(response);
 });
 
+
+
+
+
+app.post('/ussdw', (req, res) => {
+  const { text,phoneNumber } = req.body;
+  let response = '';
+
+  if (text === '') {
+    
+    // This is the first request. Ask for your loved one's name.
+    response = `CON Hi, it's Alex Kemboi. I just wanted to remind you how much I love you.
+   Press 1 to Send:`;
+    sendMessage(`Hi, it's Alex Kemboi. I just wanted to remind you how much I love you.`,phoneNumber);
+  } else if (text=== '1') {
+    // User entered their name. Save the name and express your love.
+    
+    response = `CON Hi I want you to know that you mean the world to me. I love you more than words can express.
+    Press 2 to continue...`;
+  } else if (text=== '2' ) {
+    // User pressed a key to continue. Send another love message.
+    response = `CON my love for you grows stronger with each passing day. You make my life brighter and happier.
+    Press 3 key to continue...`;
+  } else if (text=== '3') {
+    // User pressed a key to continue. Send the final love message.
+    response = `CON I just want to say that I am incredibly lucky to have you in my life. I love you more than anything in this world.
+    Press 3 to end...`;
+  } else {
+    // Handle unrecognized or invalid input.
+    response = `CON Even if you pressed a wrong number ,I Alex still loves you. press send to exit`;
+  }
+
+  // Send the response back to the USSD gateway
+  res.set('Content-Type', 'text/plain');
+  res.send(response);
+});
+
+
+
+
+
+
+
+
+
+app.post('/voice',function(req, res) {  
+  const text = 'Thank you for using our application';
+  const response = `<?xml version="1.0" encoding="UTF-8"?>
+    <Response>
+      <Say>${text}</Say>
+    </Response>`;
+    
+  res.set('Content-Type: text/plain');
+  res.send(response);
+}); //
 // Get the voice service
 const voice = AfricasTalking.VOICE;
 function makeCall(phoneNumber) {
   const options = {
       // Set your Africa's Talking phone number in international format
-      callFrom: '+254711082571',
+      callFrom:'+254711082434',
       // Set the numbers you want to call to in a comma-separated list
       callTo: phoneNumber
   }
-
+ 
   // Make the call
   voice.call(options)
       .then(console.log)
       .catch(console.log);
+      
 }
 
 const port = process.env.PORT || 3001;
