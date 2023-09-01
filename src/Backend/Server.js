@@ -38,7 +38,7 @@ app.post("/SendSms", (req, res) => {
 });
 //sendMessage(message, phone);
 
-app.post('/ussd', (req, res) => {
+app.post('/ussds', (req, res) => {
   // Read the variables sent via POST from our API
   const {
       sessionId,
@@ -204,11 +204,11 @@ else if (text === '3*1') {
 
 
 
-app.post('/ussdw', (req, res) => {
+app.post('/ussd', (req, res) => {
   const { text,phoneNumber } = req.body;
   let response = '';
 
-  if (text === '') {
+  if (text === '') {sxd
     
     // This is the first request. Ask for your loved one's name.
     response = `CON Hi, it's Alex Kemboi. I just wanted to remind you how much I love you.
